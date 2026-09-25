@@ -1,0 +1,297 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>News | SJC Games</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: white !important;
+            color: black !important;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            border-bottom: 2px solid black;
+        }
+
+        .logo {
+            width: 180px;
+            max-width: 70%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            font-size: 28px;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+            margin-top: 50px;
+        }
+
+        .news-box {
+            border: 2px solid black;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .date {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .news-box h3 {
+            font-size: 24px;
+            margin: 5px 0 10px;
+        }
+
+        .subject {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .news-box p {
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .empty {
+            border: 2px dashed black;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        footer {
+            border-top: 2px solid black;
+            text-align: center;
+            padding: 25px 20px;
+            margin-top: 70px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px 15px 15px;
+            }
+
+            .logo {
+                width: 150px;
+                margin-bottom: 15px;
+            }
+
+            nav {
+                gap: 15px;
+            }
+
+            nav a {
+                font-size: 13px;
+            }
+
+            main {
+                margin: 35px auto;
+                padding: 0 15px;
+            }
+
+            h1 {
+                font-size: 32px;
+                margin-bottom: 35px;
+            }
+
+            h2 {
+                font-size: 23px;
+            }
+
+            .news-box {
+                padding: 20px;
+            }
+
+            .news-box h3 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <img
+        src="sjc-logo.png"
+        alt="SJC Games Logo"
+        class="logo"
+    >
+
+    <nav>
+        <a href="index.html">HOME</a>
+        <a href="games.html">GAMES</a>
+        <a href="news.html">NEWS</a>
+        <a href="about.html">ABOUT</a>
+        <a href="contact.html">CONTACT</a>
+    </nav>
+
+</header>
+
+<main>
+
+    <h1>NEWS</h1>
+
+    <section>
+        <h2>LATEST NEWS</h2>
+        <div id="latest-news"></div>
+    </section>
+
+    <section>
+        <h2>WITHIN THE LAST THREE WEEKS</h2>
+        <div id="recent-news"></div>
+    </section>
+
+    <section>
+        <h2>OLDER NEWS</h2>
+        <div id="older-news"></div>
+    </section>
+
+</main>
+
+<footer>
+    © 2026 SJC Games. All rights reserved.
+</footer>
+
+<script>
+
+const news = [
+    {
+        date: "2026-09-24",
+        title: "Welcome to SJC Games",
+        subject: "SJC Games Website",
+        text: "Welcome to the official SJC Games website. This is where you will find our games, development news and announcements."
+    },
+    {
+        date: "2026-09-23",
+        title: "Our First Game",
+        subject: "Game Development",
+        text: "Development on our first game is beginning. More information will be revealed as development continues."
+    }
+];
+
+const today = new Date();
+
+const latest = [];
+const recent = [];
+const older = [];
+
+news.forEach(article => {
+
+    const articleDate = new Date(article.date);
+
+    const difference =
+        (today - articleDate) / (1000 * 60 * 60 * 24);
+
+    if (difference <= 3) {
+        latest.push(article);
+    }
+    else if (difference <= 21) {
+        recent.push(article);
+    }
+    else if (difference <= 60) {
+        older.push(article);
+    }
+
+});
+
+function displayNews(newsArray, elementId) {
+
+    const container = document.getElementById(elementId);
+
+    if (newsArray.length === 0) {
+        container.innerHTML =
+            '<div class="empty">No news in this period.</div>';
+        return;
+    }
+
+    newsArray.sort(
+        (a, b) =>
+            new Date(b.date) - new Date(a.date)
+    );
+
+    newsArray.forEach(article => {
+
+        const box = document.createElement("div");
+
+        box.className = "news-box";
+
+        box.innerHTML = `
+            <div class="date">
+                Posted: ${article.date}
+            </div>
+
+            <h3>${article.title}</h3>
+
+            <div class="subject">
+                Subject: ${article.subject}
+            </div>
+
+            <p>
+                ${article.text}
+            </p>
+        `;
+
+        container.appendChild(box);
+
+    });
+
+}
+
+displayNews(latest, "latest-news");
+displayNews(recent, "recent-news");
+displayNews(older, "older-news");
+
+</script>
+
+</body>
+</html>
+```
